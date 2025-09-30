@@ -6,10 +6,16 @@ export class Game extends Scene
     camera: Phaser.Cameras.Scene2D.Camera;
     background: Phaser.GameObjects.Image;
     gameText: Phaser.GameObjects.Text;
+    keysDown: Set<string>;
+    activeLetters: Record<string, Phaser.GameObjects.Text>;
+    isMouseDown: boolean;
 
     constructor ()
     {
         super('Game');
+        this.activeLetters = {};
+        this.isMouseDown = false;
+        this.keysDown = new Set();
     }
 
     create ()
@@ -20,13 +26,25 @@ export class Game extends Scene
         this.background = this.add.image(512, 384, 'background');
         this.background.setAlpha(0.5);
 
-        this.gameText = this.add.text(512, 384, 'Make something fun!\nand share it with us:\nsupport@phaser.io', {
-            fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',
-            stroke: '#000000', strokeThickness: 8,
-            align: 'center'
-        }).setOrigin(0.5).setDepth(100);
-
         EventBus.emit('current-scene-ready', this);
+
+        this.input.keyboard?.on('keydown', (event: KeyboardEvent) => {
+            if (!this.isMouseDown) return
+            const key = event.key
+            this.activeLetters[key] = this.add.text(512 * Math.random(), 384 * Math.random(), key)
+            this.keysDown.add(key)
+        })
+        this.input.keyboard?.on('keyup', (event: KeyboardEvent) => {
+            if (!this.isMouseDown) return
+            const key = event.key
+            this.activeLetters[key].destroy()
+            delete(this.activeLetters[key])
+            this.keysDown.delete(key)
+        })
+    }
+
+    update () {
+        this.isMouseDown = this.input.activePointer.isDown
     }
 
     changeScene ()
