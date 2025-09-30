@@ -1,6 +1,6 @@
 # Keyboard Twister
 
-#Pairing Jam notes:
+Pairing Jam notes:
 
 # How Phaser and React talk to each other
 
@@ -26,7 +26,7 @@ Purpose is to setup connection between Phaser and React.
     -   Updates App.tsx state via `currentActiveScene` prop
     -   Updates `scene` field of `ref` prop for App.tsx
 
-Finally, returns <div id="game-container"> to render the Phaser game container to the DOM.
+Finally, returns `<div id="game-container">` to render the Phaser game container to the DOM.
 
 ## src/game/main.ts
 
