@@ -1,7 +1,7 @@
 import { GameObjects, Scene } from 'phaser';
 
 import { EventBus } from '../EventBus';
-import { getNextChallenge, getStrategyA, getStrategyB } from '../libs/gameEngine';
+import { getNextChallenge, getStrategyA, getStrategyB } from '../libs/GameEngine';
 
 export class MainMenu extends Scene
 {
