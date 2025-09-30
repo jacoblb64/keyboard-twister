@@ -7,12 +7,18 @@ export interface IRefPhaserGame {
     scene: Phaser.Scene | null;
 }
 
+export type GameState = {
+    score: number;
+    challengeWord: string;
+};
+
 interface IProps {
     currentActiveScene?: (scene_instance: Phaser.Scene) => void;
+    updateGameState: (state: Partial<GameState>) => void;
 }
 
 export const PhaserGame = forwardRef<IRefPhaserGame, IProps>(
-    function PhaserGame({ currentActiveScene }, ref) {
+    function PhaserGame({ currentActiveScene, updateGameState }, ref) {
         const game = useRef<Phaser.Game | null>(null!);
 
         useLayoutEffect(() => {
@@ -57,8 +63,19 @@ export const PhaserGame = forwardRef<IRefPhaserGame, IProps>(
                     }
                 }
             );
+
+            EventBus.on("update-score", (score: number) => {
+                updateGameState({ score });
+            });
+
+            EventBus.on("update-word", (challengeWord: string) => {
+                updateGameState({ challengeWord });
+            });
+
             return () => {
                 EventBus.removeListener("current-scene-ready");
+                EventBus.removeListener("update-score");
+                EventBus.removeListener("update-word");
             };
         }, [currentActiveScene, ref]);
 

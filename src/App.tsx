@@ -1,15 +1,22 @@
-import { useRef } from "react";
-import { IRefPhaserGame, PhaserGame } from "./PhaserGame";
+import { useRef, useState } from "react";
+import { IRefPhaserGame, PhaserGame, GameState } from "./PhaserGame";
 
 function App() {
-    // The sprite can only be moved in the MainMenu Scene
+    const [gameState, setGameState] = useState({
+        score: 0,
+        challengeWord: "",
+    });
 
     //  References to the PhaserGame component (game and scene are exposed)
     const phaserRef = useRef<IRefPhaserGame | null>(null);
 
     // Event emitted from the PhaserGame component
     const currentScene = (scene: Phaser.Scene) => {
-        //
+        console.log(`Current scene is`, scene.scene.key);
+    };
+
+    const updateGameState = (state: Partial<GameState>) => {
+        setGameState((prev) => ({ ...prev, ...state }));
     };
 
     return (
@@ -23,9 +30,15 @@ function App() {
                     fontSize: "3rem",
                 }}
             >
-                score!
+                Current Word: {gameState.challengeWord}
+                <br />
+                Score: {gameState.score}
             </div>
-            <PhaserGame ref={phaserRef} currentActiveScene={currentScene} />
+            <PhaserGame
+                ref={phaserRef}
+                currentActiveScene={currentScene}
+                updateGameState={updateGameState}
+            />
         </div>
     );
 }
