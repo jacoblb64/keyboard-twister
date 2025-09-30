@@ -26,7 +26,7 @@ export function getStrategyB(): Challenge[] {
             challenges.push({ characterLength: i, time: j });
         }
     }
-    console.log(challenges);
+    // console.log(challenges);
     return challenges;
 
     return [

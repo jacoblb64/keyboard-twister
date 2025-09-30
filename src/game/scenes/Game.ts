@@ -27,6 +27,7 @@ export class Game extends Scene
         this.challengeNumber = 0
         this.mockString = getNextChallenge(this.challengeNumber++, this.gameStrategy).word
         console.log('Challenge:', this.mockString)
+        EventBus.emit('update-word', this.mockString)
     }
 
     checkAgainstChallenge(key: string) {
@@ -46,6 +47,7 @@ export class Game extends Scene
                 }
                 this.activeTextObjects = {}
                 console.log("New challenge: ", this.mockString)
+                EventBus.emit('update-word', this.mockString)
             }
             
         }
@@ -79,7 +81,6 @@ export class Game extends Scene
 
     update () {
         this.isMouseDown = this.input.activePointer.isDown
-        
     }
 
     changeScene ()
