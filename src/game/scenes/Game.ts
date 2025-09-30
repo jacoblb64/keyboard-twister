@@ -25,7 +25,7 @@ export class Game extends Scene
         this.keysDown = new Set();
         this.gameStrategy = getStrategyB();
         this.challengeNumber = 0
-        this.mockString = getNextChallenge(this.challengeNumber, this.gameStrategy).word
+        this.mockString = getNextChallenge(this.challengeNumber++, this.gameStrategy).word
         console.log('Challenge:', this.mockString)
     }
 
