@@ -1,5 +1,5 @@
-import mediumWords from "../../../public/assets/files/google-10000-english-usa-no-swears-medium.txt?raw";
-import shortWords from "../../../public/assets/files/google-10000-english-usa-no-swears-short.txt?raw";
+import mediumWords from "/assets/files/google-10000-english-usa-no-swears-medium.txt?raw";
+import shortWords from "/assets/files/google-10000-english-usa-no-swears-short.txt?raw";
 export interface Challenge {
     characterLength: number;
     time: number;
