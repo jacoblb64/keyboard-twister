@@ -10,12 +10,26 @@ export class Game extends Scene
     activeLetters: Record<string, Phaser.GameObjects.Text>;
     isMouseDown: boolean;
 
+    mockString: string;
+
     constructor ()
     {
         super('Game');
         this.activeLetters = {};
         this.isMouseDown = false;
         this.keysDown = new Set();
+        this.mockString = "qwert";
+    }
+
+    checkAgainstChallenge(key: string) {
+        if (this.mockString.indexOf(key) > -1) {
+            if (!this.activeLetters[key]) {
+                this.activeLetters[key] = this.add.text(512 * Math.random(), 384 * Math.random(), key, {
+                    fontSize: '36pt'
+                })
+            }
+            this.keysDown.add(key)
+        }
     }
 
     create ()
@@ -30,11 +44,8 @@ export class Game extends Scene
 
         this.input.keyboard?.on('keydown', (event: KeyboardEvent) => {
             if (!this.isMouseDown) return
-            const key = event.key
-            if (!this.activeLetters[key]) {
-                this.activeLetters[key] = this.add.text(512 * Math.random(), 384 * Math.random(), key)
-            }
-            this.keysDown.add(key)
+            this.checkAgainstChallenge(event.key)
+
         })
         this.input.keyboard?.on('keyup', (event: KeyboardEvent) => {
             if (!this.isMouseDown) return
