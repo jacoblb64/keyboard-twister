@@ -1,11 +1,6 @@
 import { GameObjects, Scene } from "phaser";
 
 import { EventBus } from "../EventBus";
-import {
-    getNextChallenge,
-    getStrategyA,
-    getStrategyB,
-} from "../libs/GameEngine";
 
 export class MainMenu extends Scene {
     background: GameObjects.Image;
@@ -19,9 +14,7 @@ export class MainMenu extends Scene {
 
     create() {
         this.background = this.add.image(512, 384, "background");
-        const myStrategy = getStrategyB();
-        const nextChallenge = getNextChallenge(0, myStrategy);
-        console.log(nextChallenge);
+
         this.logo = this.add.image(512, 300, "logo").setDepth(100);
 
         this.title = this.add
