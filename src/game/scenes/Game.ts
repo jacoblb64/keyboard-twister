@@ -31,14 +31,18 @@ export class Game extends Scene
         this.input.keyboard?.on('keydown', (event: KeyboardEvent) => {
             if (!this.isMouseDown) return
             const key = event.key
-            this.activeLetters[key] = this.add.text(512 * Math.random(), 384 * Math.random(), key)
+            if (!this.activeLetters[key]) {
+                this.activeLetters[key] = this.add.text(512 * Math.random(), 384 * Math.random(), key)
+            }
             this.keysDown.add(key)
         })
         this.input.keyboard?.on('keyup', (event: KeyboardEvent) => {
             if (!this.isMouseDown) return
             const key = event.key
-            this.activeLetters[key].destroy()
-            delete(this.activeLetters[key])
+            if (this.activeLetters[key]) {
+                this.activeLetters[key].destroy()
+                delete(this.activeLetters[key])
+            }
             this.keysDown.delete(key)
         })
     }
