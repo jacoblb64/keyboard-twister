@@ -1,5 +1,5 @@
 import { EventBus } from '../EventBus';
-import { GameObjects, Scene } from 'phaser';
+import { GameObjects, Scene, Time } from 'phaser';
 
 import { Challenge, getNextChallenge, getStrategyB } from '../libs/GameEngine';
 
@@ -15,8 +15,10 @@ export class Game extends Scene
     isMouseDown: boolean;
     challengeNumber: number;
     score: number;
+    timer: any;
+    timeText: any;
 
-    mockString: string;
+    curChallengeText: string;
     gameStrategy: Challenge[];
 
     explainerText = `
@@ -34,22 +36,30 @@ export class Game extends Scene
         this.gameStrategy = getStrategyB();
         this.challengeNumber = 0;
         this.score = 0;
-        this.mockString = getNextChallenge(this.challengeNumber++, this.gameStrategy).word
-        console.log('Challenge:', this.mockString)
-        EventBus.emit('update-word', this.mockString)
+        this.curChallengeText = getNextChallenge(this.challengeNumber++, this.gameStrategy).word
+        console.log('Challenge:', this.curChallengeText)
+        EventBus.emit('update-word', this.curChallengeText)
     }
 
     checkAgainstChallenge(key: string) {
-        if (this.mockString.indexOf(key) > -1) {
+        if (this.curChallengeText.indexOf(key) > -1) {
             if (!this.activeTextObjects[key]) {
                 this.activeTextObjects[key] = this.add.text(512 * Math.random(), 384 * Math.random(), key, {
                     fontSize: '36pt'
                 })
             }
             this.keysDown.add(key)
-            if (this.keysDown.size === this.mockString.length) {
+            if (this.keysDown.size === this.curChallengeText.length) {
                 console.log("Met challenge!")
-                this.mockString = getNextChallenge(this.challengeNumber++, this.gameStrategy).word
+                let next = getNextChallenge(this.challengeNumber++, this.gameStrategy);
+                this.curChallengeText = next.word;
+                this.timer = this.time.addEvent({
+                    delay: next.time * 1000,
+                    callback: this.timerUp,
+                    callbackScope: this,
+                    args: [this.challengeNumber]
+                });
+
                 this.keysDown = new Set()
                 for(const key in this.activeTextObjects) {
                     this.activeTextObjects[key].destroy()
@@ -59,8 +69,8 @@ export class Game extends Scene
                 this.score++;
                 EventBus.emit('update-score', this.score);
 
-                console.log("New challenge: ", this.mockString)
-                EventBus.emit('update-word', this.mockString)
+                console.log("New challenge: ", this.curChallengeText)
+                EventBus.emit('update-word', this.curChallengeText)
             }
             
         }
@@ -75,9 +85,8 @@ export class Game extends Scene
         this.background.setAlpha(0.5);
 
         this.explainer = this.add
-            .text(512, 200, this.explainerText, {
-                fontFamily: "Arial",
-                fontSize: 30,
+            .text(450, 300, this.explainerText, {
+                fontSize: 24,
                 color: "#ffffff",
                 stroke: "#000000",
                 strokeThickness: 2,
@@ -85,6 +94,8 @@ export class Game extends Scene
             })
             .setOrigin(0.5)
             .setDepth(100);
+
+        this.timeText = this.add.text(1024 - 32, 32, "Time: 5").setOrigin(1, 0).setDepth(1);
 
         EventBus.emit('current-scene-ready', this);
 
@@ -107,10 +118,21 @@ export class Game extends Scene
 
     update () {
         this.isMouseDown = this.input.activePointer.isDown
+        if (this.timer) {
+            this.timeText.setText("Time: " + Math.ceil(this.timer.getRemainingSeconds()))
+        }
     }
 
     changeScene ()
     {
         this.scene.start('GameOver');
+    }
+
+    timerUp(args: any) {
+        // if the player is still on the same challenge that the timer was created at, game over
+        if (args && args >= this.challengeNumber) {
+            this.registry.set('score', this.score);
+            this.changeScene();
+        }
     }
 }

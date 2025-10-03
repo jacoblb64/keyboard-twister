@@ -20,17 +20,23 @@ export class GameOver extends Scene
         this.background = this.add.image(512, 384, 'background');
         this.background.setAlpha(0.5);
 
-        this.gameOverText = this.add.text(512, 384, 'Game Over', {
-            fontFamily: 'Arial Black', fontSize: 64, color: '#ffffff',
-            stroke: '#000000', strokeThickness: 8,
+        const score = this.registry.get('score');
+
+        this.gameOverText = this.add.text(512, 384, `game over\nscore: ${score}\nclick to play again`, {
+            fontSize: 36, color: '#ffffff',
+            stroke: '#000000', strokeThickness: 2,
             align: 'center'
         }).setOrigin(0.5).setDepth(100);
         
         EventBus.emit('current-scene-ready', this);
+
+        this.input.once('pointerdown', () => {
+            this.changeScene();
+        });
     }
 
     changeScene ()
     {
-        this.scene.start('MainMenu');
+        this.scene.start('Game');
     }
 }
