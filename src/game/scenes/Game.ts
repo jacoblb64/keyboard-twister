@@ -1,7 +1,7 @@
 import { EventBus } from '../EventBus';
 import { GameObjects, Scene, Time } from 'phaser';
 
-import { Challenge, getNextChallenge, getStrategyB } from '../libs/GameEngine';
+import { Challenge, getNextChallenge, getScore, getStrategyB } from '../libs/GameEngine';
 
 export class Game extends Scene
 {
@@ -15,8 +15,8 @@ export class Game extends Scene
     isMouseDown: boolean;
     challengeNumber: number;
     score: number;
-    timer: any;
-    timeText: any;
+    timer: Time.TimerEvent;
+    timeText: GameObjects.Text;
 
     curChallengeText: string;
     gameStrategy: Challenge[];
@@ -51,6 +51,12 @@ export class Game extends Scene
             this.keysDown.add(key)
             if (this.keysDown.size === this.curChallengeText.length) {
                 console.log("Met challenge!")
+
+                let scoreIncrement = 1;
+                if (this.timer) {
+                    scoreIncrement = getScore(this.timer.getElapsedSeconds(), this.curChallengeText.length)
+                }
+
                 let next = getNextChallenge(this.challengeNumber++, this.gameStrategy);
                 this.curChallengeText = next.word;
                 this.timer = this.time.addEvent({
@@ -66,7 +72,7 @@ export class Game extends Scene
                 }
                 this.activeTextObjects = {}
 
-                this.score++;
+                this.score += scoreIncrement;
                 EventBus.emit('update-score', this.score);
 
                 console.log("New challenge: ", this.curChallengeText)

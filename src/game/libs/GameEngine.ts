@@ -6,7 +6,7 @@ export interface Challenge {
 }
 
 export function getScore(time: number, length: number) {
-    return (Math.ceil(time) - 6) * length;
+    return (6 - Math.ceil(time)) * length;
 }
 
 // gets selected by user once they start everything up;
