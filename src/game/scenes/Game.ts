@@ -1,5 +1,5 @@
 import { EventBus } from '../EventBus';
-import { Scene } from 'phaser';
+import { GameObjects, Scene } from 'phaser';
 
 import { Challenge, getNextChallenge, getStrategyB } from '../libs/GameEngine';
 
@@ -8,14 +8,22 @@ export class Game extends Scene
     camera: Phaser.Cameras.Scene2D.Camera;
     background: Phaser.GameObjects.Image;
     gameText: Phaser.GameObjects.Text;
+    explainer: GameObjects.Text;
     
     keysDown: Set<string>;
     activeTextObjects: Record<string, Phaser.GameObjects.Text>;
     isMouseDown: boolean;
     challengeNumber: number;
+    score: number;
 
     mockString: string;
     gameStrategy: Challenge[];
+
+    explainerText = `
+        Keyboard Twister!
+        Hold your mouse clicked with one hand, don't use it!
+        With your other hand, press all of the letters of the current word
+    `;
 
     constructor ()
     {
@@ -24,7 +32,8 @@ export class Game extends Scene
         this.isMouseDown = false;
         this.keysDown = new Set();
         this.gameStrategy = getStrategyB();
-        this.challengeNumber = 0
+        this.challengeNumber = 0;
+        this.score = 0;
         this.mockString = getNextChallenge(this.challengeNumber++, this.gameStrategy).word
         console.log('Challenge:', this.mockString)
         EventBus.emit('update-word', this.mockString)
@@ -46,6 +55,10 @@ export class Game extends Scene
                     this.activeTextObjects[key].destroy()
                 }
                 this.activeTextObjects = {}
+
+                this.score++;
+                EventBus.emit('update-score', this.score);
+
                 console.log("New challenge: ", this.mockString)
                 EventBus.emit('update-word', this.mockString)
             }
@@ -61,10 +74,23 @@ export class Game extends Scene
         this.background = this.add.image(512, 384, 'background');
         this.background.setAlpha(0.5);
 
+        this.explainer = this.add
+            .text(512, 200, this.explainerText, {
+                fontFamily: "Arial",
+                fontSize: 30,
+                color: "#ffffff",
+                stroke: "#000000",
+                strokeThickness: 2,
+                align: "center",
+            })
+            .setOrigin(0.5)
+            .setDepth(100);
+
         EventBus.emit('current-scene-ready', this);
 
         this.input.keyboard?.on('keydown', (event: KeyboardEvent) => {
             if (!this.isMouseDown) return
+            this.explainer.destroy();
             this.checkAgainstChallenge(event.key)
 
         })
