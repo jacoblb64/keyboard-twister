@@ -36,9 +36,6 @@ export class Game extends Scene
         this.gameStrategy = getStrategyB();
         this.challengeNumber = 0;
         this.score = 0;
-        this.curChallengeText = getNextChallenge(this.challengeNumber++, this.gameStrategy).word
-        console.log('Challenge:', this.curChallengeText)
-        EventBus.emit('update-word', this.curChallengeText)
     }
 
     checkAgainstChallenge(key: string) {
@@ -102,6 +99,10 @@ export class Game extends Scene
             .setDepth(100);
 
         this.timeText = this.add.text(1024 - 32, 32, "Time: 5").setOrigin(1, 0).setDepth(1);
+
+        this.curChallengeText = getNextChallenge(this.challengeNumber++, this.gameStrategy).word
+        console.log('Challenge:', this.curChallengeText)
+        EventBus.emit('update-word', this.curChallengeText)
 
         EventBus.emit('current-scene-ready', this);
 
