@@ -1,4 +1,8 @@
-# Keyboard Twister
+# [*Keyboard Twister*](https://keyboard-twister.netlify.app/)
+
+A quick [Recurse Center](https://www.recurse.com/) game jam project
+
+---
 
 Pairing Jam notes:
 
@@ -8,23 +12,23 @@ Pairing Jam notes:
 
 Purpose is to setup DOM layout, mirror Phaser state with React state, both directions:
 
--   Phaser -> React: via callbacks passed to Phaser
--   React -> Phaser: via ref to PhaserGame component
+- Phaser -> React: via callbacks passed to Phaser
+- React -> Phaser: via ref to PhaserGame component
 
 ## src/PhaserGame.tsx
 
 Purpose is to setup connection between Phaser and React.
 
-### via useLayoutEffect:
+### via useLayoutEffect
 
--   Establishes reference to game via StartGame
--   Updates `game` field of `ref` prop for App.tsx
+- Establishes reference to game via StartGame
+- Updates `game` field of `ref` prop for App.tsx
 
-### via useEffect:
+### via useEffect
 
--   Creates an event listener for the "current-scene-ready" event via EventBus, which:
-    -   Updates App.tsx state via `currentActiveScene` prop
-    -   Updates `scene` field of `ref` prop for App.tsx
+- Creates an event listener for the "current-scene-ready" event via EventBus, which:
+  - Updates App.tsx state via `currentActiveScene` prop
+  - Updates `scene` field of `ref` prop for App.tsx
 
 Finally, returns `<div id="game-container">` to render the Phaser game container to the DOM.
 
@@ -50,10 +54,10 @@ This is a Phaser 3 project template that uses the React framework and Vite for b
 
 This template has been updated for:
 
--   [Phaser 3.90.0](https://github.com/phaserjs/phaser)
--   [React 19.0.0](https://github.com/facebook/react)
--   [Vite 6.3.1](https://github.com/vitejs/vite)
--   [TypeScript 5.7.2](https://github.com/microsoft/TypeScript)
+- [Phaser 3.90.0](https://github.com/phaserjs/phaser)
+- [React 19.0.0](https://github.com/facebook/react)
+- [Vite 6.3.1](https://github.com/vitejs/vite)
+- [TypeScript 5.7.2](https://github.com/microsoft/TypeScript)
 
 ![screenshot](screenshot.png)
 
@@ -212,7 +216,7 @@ When you issue the `npm run build` command, all static assets are automatically 
 
 After you run the `npm run build` command, your code will be built into a single bundle and saved to the `dist` folder, along with any other assets your project imported, or stored in the public assets folder.
 
-In order to deploy your game, you will need to upload _all_ of the contents of the `dist` folder to a public facing web server.
+In order to deploy your game, you will need to upload *all* of the contents of the `dist` folder to a public facing web server.
 
 ## Customizing the Template
 
@@ -266,7 +270,7 @@ After:
 
 Either of these will stop `log.js` from running. If you do decide to do this, please could you at least join our Discord and tell us which template you're using! Or send us a quick email. Either will be super-helpful, thank you.
 
-## Join the Phaser Community!
+## Join the Phaser Community
 
 We love to see what developers like you create with Phaser! It really motivates us to keep improving. So please join our community and show-off your work 😄
 
