@@ -22,7 +22,7 @@ export function getStrategyB(): Challenge[] {
     const challenges: Challenge[] = [];
 
     // basic 5 sets of 1-5 characters, with decreasing time
-    for (let j = 5; j >= 1; j--) {
+    for (let j = 6; j >= 1; j--) {
         for (let i = 1; i <= 5; i++) {
             challenges.push({ characterLength: i, time: j });
         }
@@ -31,7 +31,7 @@ export function getStrategyB(): Challenge[] {
     // expert mode -- make it impossible to finish
     for (let j = 5; j <= 10; j++) {
         for (let i = 0; i <= 10; i++) {
-            challenges.push({ characterLength: j, time: 1 });
+            challenges.push({ characterLength: j, time: 3 });
         }
     }
 
