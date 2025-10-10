@@ -20,25 +20,19 @@ function App() {
     };
 
     return (
-        <div id="app">
-            <div
-                style={{
-                    top: "1rem",
-                    position: "absolute",
-                    backgroundColor: "white",
-                    color: "black",
-                    fontSize: "3rem",
-                }}
-            >
-                Current Word: {gameState.challengeWord}
-                <br />
-                Score: {gameState.score}
+        <div className="w-[100%] h-[100vh] flex flex-col items-center justify-center">
+            <div className="text-center mb-4 text-3xl">
+                Current Challenge
+                <strong className="text-5xl mt-2 block">{gameState.challengeWord.toUpperCase()}</strong>
             </div>
             <PhaserGame
                 ref={phaserRef}
                 currentActiveScene={currentScene}
                 updateGameState={updateGameState}
             />
+            <div className="mt-4 text-3xl font-bold">
+                {gameState.score}
+            </div>
         </div>
     );
 }
