@@ -15,10 +15,22 @@ export class MainMenu extends Scene {
     create() {
         this.background = this.add.image(512, 384, "background");
 
-        this.logo = this.add.image(512, 300, "logo").setDepth(100);
+        // this.logo = this.add.image(512, 300, "logo").setDepth(100);
+
+        this.add
+            .text(512, 320, "KEYBOARD\nTWISTER", {
+                fontFamily: "Arial Black",
+                fontSize: 96,
+                color: "#ffffff",
+                stroke: "#000000",
+                strokeThickness: 8,
+                align: "center",
+            })
+            .setOrigin(0.5)
+            .setDepth(100);
 
         this.title = this.add
-            .text(512, 460, "Main Menu", {
+            .text(512, 480, "Start Game", {
                 fontFamily: "Arial Black",
                 fontSize: 38,
                 color: "#ffffff",
@@ -28,6 +40,11 @@ export class MainMenu extends Scene {
             })
             .setOrigin(0.5)
             .setDepth(100);
+
+        this.title.setInteractive();
+        this.title.once('pointerdown', () => {
+            this.changeScene();
+        });
 
         EventBus.emit("current-scene-ready", this);
     }
@@ -40,6 +57,8 @@ export class MainMenu extends Scene {
 
         this.scene.start("Game");
     }
+
+    
 
     moveLogo(vueCallback: ({ x, y }: { x: number; y: number }) => void) {
         if (this.logoTween) {

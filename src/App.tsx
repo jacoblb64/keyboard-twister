@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { IRefPhaserGame, PhaserGame, GameState } from "./PhaserGame";
 
 function App() {
@@ -6,6 +6,7 @@ function App() {
         score: 0,
         challengeWord: "",
     });
+    const [hasChallenge, setHasChallenge] = useState(false);
 
     //  References to the PhaserGame component (game and scene are exposed)
     const phaserRef = useRef<IRefPhaserGame | null>(null);
@@ -19,26 +20,30 @@ function App() {
         setGameState((prev) => ({ ...prev, ...state }));
     };
 
+    useEffect(() => {
+        setHasChallenge(gameState.challengeWord.length > 0);
+    }, [gameState.challengeWord]);
+
     return (
-        <div id="app">
-            <div
-                style={{
-                    top: "1rem",
-                    position: "absolute",
-                    backgroundColor: "white",
-                    color: "black",
-                    fontSize: "3rem",
-                }}
-            >
-                Current Word: {gameState.challengeWord}
-                <br />
-                Score: {gameState.score}
-            </div>
+        <div className="w-[100%] h-[100vh] flex flex-col items-center justify-center">
+            {
+                hasChallenge &&
+                    <div className="text-center mb-4 text-3xl">
+                        Current Challenge
+                        <strong className="text-5xl mt-2 block">{gameState.challengeWord.toUpperCase()}</strong>
+                    </div>
+            }
             <PhaserGame
                 ref={phaserRef}
                 currentActiveScene={currentScene}
                 updateGameState={updateGameState}
             />
+            {
+                hasChallenge &&
+                    <div className="mt-4 text-3xl font-bold">
+                        {gameState.score}
+                    </div>
+            }
         </div>
     );
 }
