@@ -26,9 +26,11 @@ export class Game extends Scene {
     gameStrategy: Challenge[];
 
     explainerText = `
-        Keyboard Twister!
-        Hold your mouse clicked with one hand, don't use it!
-        With your other hand, press all of the letters of the current word
+        Hold your mouse clicked with one hand.
+        Don't use it!
+
+        With your other hand,
+        press all of the letters of the current word.
     `;
 
     constructor() {
